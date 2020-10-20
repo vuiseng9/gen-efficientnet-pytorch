@@ -95,7 +95,7 @@ def create_loader(
     loader = torch.utils.data.DataLoader(
         dataset,
         batch_size=batch_size,
-        shuffle=False,
+        shuffle=is_training,
         num_workers=num_workers,
         collate_fn=fast_collate if use_prefetcher else torch.utils.data.dataloader.default_collate,
     )
