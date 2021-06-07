@@ -3,7 +3,8 @@ from .helpers import load_checkpoint
 
 from .gen_efficientnet import *
 from .mobilenetv3 import *
-
+import torchvision.models as torchvision_models
+from functools import partial
 
 def create_model(
         model_name='mnasnet_100',
@@ -18,9 +19,10 @@ def create_model(
     if model_name in globals():
         create_fn = globals()[model_name]
         model = create_fn(**model_kwargs)
+    elif model_name in torchvision_models.__dict__:
+        model = torchvision_models.__dict__[model_name](pretrained)
     else:
         raise RuntimeError('Unknown model (%s)' % model_name)
-
     if checkpoint_path and not pretrained:
         load_checkpoint(model, checkpoint_path)
 
